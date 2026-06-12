@@ -1,6 +1,6 @@
 {
   "name": "@wexio/messenger-widget-vue",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Vue 3 component embed for the Wexio web messenger. Thin reactive wrapper around the <wexio-widget> web component — same WidgetShell runtime, same Shadow-DOM isolation.",
   "license": "MIT",
   "private": false,

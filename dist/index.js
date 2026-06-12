@@ -33,7 +33,27 @@ import {
   watch,
 } from "vue";
 
-import "./widget.js";
+/**
+ * Runtime-inject the widget bundle from the CDN on first mount.
+ * Matches the Angular/Ember v1.0.24 pattern — avoids the consumer's
+ * Vite/esbuild pre-bundling the widget runtime, which appears to
+ * mangle the inlined Tailwind v4 stylesheet string and break custom
+ * element styling (input borders disappear, etc). Loading from the
+ * CDN keeps the widget bundle on its native origin where its build
+ * output is untouched, and the browser caches the module so
+ * subsequent component instances skip the network request.
+ */
+function ensureRuntime() {
+  if (typeof document === "undefined") return;
+  if (typeof customElements !== "undefined" && customElements.get("wexio-widget")) return;
+  if (document.querySelector("script[data-wexio-widget-runtime]")) return;
+  const script = document.createElement("script");
+  script.type = "module";
+  script.src = "https://cdn.wexio.io/widget/widget.js";
+  script.setAttribute("data-wexio-widget-runtime", "");
+  script.async = true;
+  document.head.appendChild(script);
+}
 
 export const WexioWidget = defineComponent({
   name: "WexioWidget",
@@ -71,6 +91,7 @@ export const WexioWidget = defineComponent({
     const onClose = () => emit("close");
 
     onMounted(() => {
+      ensureRuntime();
       const el = elRef.value;
       if (!el) return;
       el.addEventListener("wexio:resize", onResize);
