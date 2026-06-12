@@ -1,0 +1,40 @@
+{
+  "name": "@wexio/messenger-widget-vue",
+  "version": "1.0.23",
+  "description": "Vue 3 component embed for the Wexio web messenger. Thin reactive wrapper around the <wexio-widget> web component — same WidgetShell runtime, same Shadow-DOM isolation.",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wexiohub/messenger-widget-vue.git"
+  },
+  "homepage": "https://github.com/wexiohub/messenger-widget-vue#readme",
+  "bugs": {
+    "url": "https://github.com/wexiohub/messenger-widget-vue/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepack": "node scripts/prepack.mjs"
+  }
+}
