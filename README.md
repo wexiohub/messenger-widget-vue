@@ -210,6 +210,10 @@ The underlying widget runtime is a Web Component, so it works in any modern fram
 
 Give a ⭐️ if this package helped you!
 
+## Changelog
+
+See the [Releases](https://github.com/wexiohub/messenger-widget-vue/releases) page for the full changelog.
+
 ## 📝 License
 
 This project is [MIT](./LICENSE) licensed.
