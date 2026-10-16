@@ -8,6 +8,7 @@ Native Vue 3 component for the [Wexio](https://wexio.io) web messenger. Thin rea
 
 🏠 [Website](https://wexio.io)
 📚 [Developer Docs](https://learn.wexio.io/docs/web-widget)
+🎮 [Playground](https://cdn.wexio.io/playground)
 
 ## Features
 
