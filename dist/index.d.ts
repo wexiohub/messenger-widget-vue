@@ -15,6 +15,14 @@ export interface VisitorIdentity {
   attributes?: Record<string, unknown>;
 }
 
+/** Navigation request: go to a tab (and optionally a help article / news
+ *  post) without a remount and open the panel. A new `nonce` re-issues it. */
+export interface PreviewTabSignal {
+  tab: "home" | "messages" | "help" | "news" | "profile";
+  nonce: number;
+  article?: { kind: "help"; slug: string } | { kind: "news"; id: string };
+}
+
 export interface WexioWidgetProps {
   /** Wexio integration public key (`pk_live_...`). Omit for demo mode. */
   publicKey?: string;
@@ -29,11 +37,19 @@ export interface WexioWidgetProps {
   prefillPhone?: string;
   /** Known-user identity proof. Pass `null` to log out. */
   user?: VisitorIdentity | null;
+  /** Open the panel on mount (uncontrolled afterwards). */
+  defaultOpen?: boolean;
+  /** Controlled open state; keep it in sync from the `open` / `close` events. */
+  open?: boolean;
+  /** Navigate to a tab / article without a remount (and open the panel). */
+  previewTab?: PreviewTabSignal;
 }
 
 export interface WexioWidgetEmits {
   /** Fires every time panel dimensions change (open ↔ closed). */
   resize: [size: { width: number; height: number }];
+  /** Fires when the panel opens. */
+  open: [];
   /** Fires when the visitor closes the panel. */
   close: [];
 }

@@ -55,6 +55,11 @@ function ensureRuntime() {
   document.head.appendChild(script);
 }
 
+/** `true`/`false` -> "true"/"false"; undefined -> undefined (attribute absent = unset). */
+function boolAttr(value) {
+  return value === undefined ? undefined : String(value);
+}
+
 export const WexioWidget = defineComponent({
   name: "WexioWidget",
   props: {
@@ -74,12 +79,21 @@ export const WexioWidget = defineComponent({
     prefillPhone: { type: String, default: undefined },
     /** Known-user identity proof. Pass `null` to log out. */
     user: { type: [Object, null], default: undefined },
+    /** Open the panel on mount (uncontrolled afterwards). */
+    defaultOpen: { type: Boolean, default: undefined },
+    /** Controlled open state; keep it in sync from the `open` / `close`
+     *  events. Leave undefined for an uncontrolled widget. */
+    open: { type: Boolean, default: undefined },
+    /** Navigate to a tab / article without a remount (and open the panel):
+     *  `{ tab, nonce, article? }`. A new `nonce` re-issues the request. */
+    previewTab: { type: Object, default: undefined },
   },
   emits: {
     resize: (payload) =>
       payload &&
       typeof payload.width === "number" &&
       typeof payload.height === "number",
+    open: () => true,
     close: () => true,
   },
   setup(props, { emit }) {
@@ -88,6 +102,7 @@ export const WexioWidget = defineComponent({
     const onResize = (event) => {
       if (event && event.detail) emit("resize", event.detail);
     };
+    const onOpen = () => emit("open");
     const onClose = () => emit("close");
 
     onMounted(() => {
@@ -95,7 +110,10 @@ export const WexioWidget = defineComponent({
       const el = elRef.value;
       if (!el) return;
       el.addEventListener("wexio:resize", onResize);
+      el.addEventListener("wexio:open", onOpen);
       el.addEventListener("wexio:close", onClose);
+      // `previewTab` is an object, so it goes through the element's JS property.
+      if (props.previewTab) el.previewTab = props.previewTab;
       if (props.user) el.identify?.(props.user);
     });
 
@@ -103,8 +121,17 @@ export const WexioWidget = defineComponent({
       const el = elRef.value;
       if (!el) return;
       el.removeEventListener("wexio:resize", onResize);
+      el.removeEventListener("wexio:open", onOpen);
       el.removeEventListener("wexio:close", onClose);
     });
+
+    watch(
+      () => props.previewTab,
+      (next) => {
+        const el = elRef.value;
+        if (el) el.previewTab = next;
+      },
+    );
 
     // Identity is set imperatively rather than as a reactive attribute —
     // mirrors the React component's `user` prop semantics. `null` /
@@ -127,6 +154,9 @@ export const WexioWidget = defineComponent({
         "prefill-name": props.prefillName,
         "prefill-email": props.prefillEmail,
         "prefill-phone": props.prefillPhone,
+        // "true" / "false" strings; undefined removes the attribute (unset).
+        "default-open": boolAttr(props.defaultOpen),
+        open: boolAttr(props.open),
       });
   },
 });

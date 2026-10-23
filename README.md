@@ -157,12 +157,16 @@ const user: VisitorIdentity = {
 | `prefill-email` | `string`                      | Unverified prechat prefill.                                                                                                                |
 | `prefill-phone` | `string`                      | Unverified prechat prefill.                                                                                                                |
 | `user`          | `VisitorIdentity \| null`     | Known-user identity proof. Pass `null` to log out.                                                                                         |
+| `default-open`  | `boolean`                     | Open the panel on mount (uncontrolled afterwards).                                                                                         |
+| `open`          | `boolean`                     | Controlled open state; keep it in sync from the `open` / `close` events. Leave unset for uncontrolled.                                     |
+| `preview-tab`   | `PreviewTabSignal`            | Navigate to a tab (`{ tab, nonce, article? }`) without a remount; opens the panel. A new `nonce` re-issues the request.                    |
 
 ## Events
 
 | Event    | Payload                                | When                                                |
 | -------- | -------------------------------------- | --------------------------------------------------- |
 | `resize` | `{ width: number; height: number }`    | Panel dimensions changed (open ↔ closed). |
+| `open`   | —                                      | The panel opened.                                    |
 | `close`  | —                                      | Visitor closed the panel.                            |
 
 ```vue
