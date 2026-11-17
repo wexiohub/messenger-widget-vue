@@ -160,6 +160,7 @@ const user: VisitorIdentity = {
 | `default-open`  | `boolean`                     | Open the panel on mount (uncontrolled afterwards).                                                                                         |
 | `open`          | `boolean`                     | Controlled open state; keep it in sync from the `open` / `close` events. Leave unset for uncontrolled.                                     |
 | `preview-tab`   | `PreviewTabSignal`            | Navigate to a tab (`{ tab, nonce, article? }`) without a remount; opens the panel. A new `nonce` re-issues the request.                    |
+| `booking-services` | `string[]` | Host narrowing of the booking services: only these service ids are offered (it only narrows; the allow-list stays server-side). |
 
 ## Events
 

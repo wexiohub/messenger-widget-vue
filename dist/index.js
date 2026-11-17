@@ -87,6 +87,8 @@ export const WexioWidget = defineComponent({
     /** Navigate to a tab / article without a remount (and open the panel):
      *  `{ tab, nonce, article? }`. A new `nonce` re-issues the request. */
     previewTab: { type: Object, default: undefined },
+    /** Host narrowing of the booking services (`booking.services`): only these service ids are offered. */
+    bookingServices: { type: Array, default: undefined },
   },
   emits: {
     resize: (payload) =>
@@ -114,6 +116,8 @@ export const WexioWidget = defineComponent({
       el.addEventListener("wexio:close", onClose);
       // `previewTab` is an object, so it goes through the element's JS property.
       if (props.previewTab) el.previewTab = props.previewTab;
+      // An array, so it too goes through the element's JS property.
+      if (props.bookingServices) el.bookingServices = props.bookingServices;
       if (props.user) el.identify?.(props.user);
     });
 
@@ -130,6 +134,14 @@ export const WexioWidget = defineComponent({
       (next) => {
         const el = elRef.value;
         if (el) el.previewTab = next;
+      },
+    );
+
+    watch(
+      () => props.bookingServices,
+      (next) => {
+        const el = elRef.value;
+        if (el) el.bookingServices = next;
       },
     );
 
